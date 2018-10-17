@@ -1,0 +1,18 @@
+- name: Install Zookeeper
+  become: true
+  apt:
+    name: zookeeperd
+
+- name: Copy configuration file
+  become: true
+  template:
+    src: 'zoo.cfg.j2'
+    dest: '/etc/zookeeper/conf/zoo.cfg'
+
+- name: Add the ID to each zookeeper instance
+  become: true
+  shell: "echo '1' > /var/lib/zookeeper/myid"
+
+
+# - name: Install the Kafka service handler
+#   copy: src=init.d/kafka dest=/etc/init.d/ mode=0755
