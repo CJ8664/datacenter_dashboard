@@ -11,22 +11,16 @@
     src: 'server.properties.j2'
     dest: '/usr/local/kafka_{{ scala_version }}-{{ kafka_version }}/config/server.properties'
 
+- name: Create log directory
+  become: true
+  file:
+    path: /usr/local/kafka_{{ scala_version }}-{{ kafka_version }}/logs
+    state: directory
+    mode: 0755
 
-
-# - hosts: kafka
-#   remote_user: root
-#   tasks:
-#   - name: Update and upgrade apt packages
-#     become: true
-#     apt:
-#       upgrade: yes
-#       update_cache: yes
-#       cache_valid_time: 86400 #One day
-#   - name: Install OpenJDK
-#     become: true
-#     apt:
-#       name: default-jdk
-#   - name: Install Zookeeper
-#     become: true
-#     apt:
-#       name: zookeeperd
+- name: Copy init.d file
+  become: true
+  template:
+    src: 'kafka.j2'
+    dest: '/etc/init.d/kafka'
+    mode: 0755

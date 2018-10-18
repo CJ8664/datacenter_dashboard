@@ -9,8 +9,8 @@
     - include: tasks/open_kafka_ports.yml
     - include: tasks/install_kafka.yml
 
-# - hosts: kafka
-#   remote_user: root
-#   serial: 1
-#   tasks:
-#     - include: tasks/stop_start_kafka.yml
+- hosts: kafka
+  remote_user: root
+  serial: 1
+  tasks:
+    - include: tasks/stop_start_kafka.yml
