@@ -1,1 +1,2 @@
-infra_setup.retry
+kafka_setup.retry
+zookeeper_setup.retry

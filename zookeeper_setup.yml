@@ -3,7 +3,7 @@
   remote_user: root
   tasks:
     - include: tasks/install_java.yml
-    - include: tasks/open_ports.yml
+    - include: tasks/open_zookeeper_ports.yml
     - include: tasks/install_zookeeper.yml
 
 - hosts: zookeeper

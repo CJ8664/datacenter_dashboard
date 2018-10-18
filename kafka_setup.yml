@@ -1,0 +1,16 @@
+---
+- hosts: kafka
+  vars:
+    scala_version: 2.12
+    kafka_version: 2.0.0
+  remote_user: root
+  tasks:
+    - include: tasks/install_java.yml
+    - include: tasks/open_kafka_ports.yml
+    - include: tasks/install_kafka.yml
+
+# - hosts: kafka
+#   remote_user: root
+#   serial: 1
+#   tasks:
+#     - include: tasks/stop_start_kafka.yml
