@@ -1,0 +1,20 @@
+# - name: Install the Kafka service handler
+#   copy: src=init.d/kafka dest=/etc/init.d/ mode=0755
+
+# - hosts: kafka
+#   remote_user: root
+#   tasks:
+#   - name: Update and upgrade apt packages
+#     become: true
+#     apt:
+#       upgrade: yes
+#       update_cache: yes
+#       cache_valid_time: 86400 #One day
+#   - name: Install OpenJDK
+#     become: true
+#     apt:
+#       name: default-jdk
+#   - name: Install Zookeeper
+#     become: true
+#     apt:
+#       name: zookeeperd

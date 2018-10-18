@@ -1,0 +1,11 @@
+- name: Stop the Zookeeper service, if running.
+  become: true
+  service:
+    name: zookeeper
+    state: stopped
+
+- name: Start the Zookeeper service.
+  become: true
+  service:
+    name: zookeeper
+    state: started
