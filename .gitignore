@@ -1,2 +1,1 @@
-kafka_setup.retry
-zookeeper_setup.retry
+*.retry

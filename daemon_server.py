@@ -13,7 +13,7 @@ def worker_node():
     '''
     The simulation of a single server
     '''
-    producer = KafkaProducer(bootstrap_servers='152.46.17.34')
+    producer = KafkaProducer(bootstrap_servers='152.46.18.75')
     while True:
         try:
             print("Hello" + multiprocessing.current_process().name)
