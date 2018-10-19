@@ -1,0 +1,21 @@
+- name: Install dependencies
+  become: true
+  apt:
+    name: software-properties-common
+
+- name: Add python apt_repository
+  become: true
+  apt_repository:
+    repo: ppa:deadsnakes/ppa
+    state: present
+
+- name: Update apt packages
+  become: true
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400 #One day
+
+- name: Install Python 3.6
+  become: true
+  apt:
+    name: python3.6

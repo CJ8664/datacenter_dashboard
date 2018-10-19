@@ -1,0 +1,7 @@
+---
+- hosts: superset
+  become: true
+  tasks:
+    # - include: tasks/open_superset_ports.yml
+    # - include: tasks/install_python.yml
+    - include: ../tasks/install_superset.yml

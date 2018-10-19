@@ -1,0 +1,15 @@
+- name: Install superset
+  become: true
+  pip:
+    name: superset
+    executable: pip3.6
+
+- name: Create an admin user.
+  shell: fabmanager create-admin --app superset --username admin --firstname admin --lastname admin --email admin@admin.com --password admin
+
+- name: Run Superset init commands
+  shell: superset {{ item }}
+  with_items:
+    - db upgrade
+    - load_examples
+    - init

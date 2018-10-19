@@ -17,10 +17,12 @@ def worker_node():
     while True:
         try:
             print("Hello" + multiprocessing.current_process().name)
-            producer.send('test', b'chirag vijay')
+            producer.send('test', "Hello" + multiprocessing.current_process().name)
             time.sleep(1)
         except KeyboardInterrupt as ex:
             break
+        except Exception as exp:
+            print(exp)
 
 
 def create_server_farm():
