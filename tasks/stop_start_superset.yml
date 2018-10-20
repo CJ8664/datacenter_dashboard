@@ -1,5 +1,6 @@
 - name: Stop the Superset server, if running
-  shell: pgrep gunicorn | xargs kill -2 > /dev/null 2>&1
+  shell: "for i in `ps aux | grep gunicorn | awk '{ print $2 }'`; do kill -2 $i; done"
+  ignore_errors: true
 
 - name: Start the Superset server
   shell: gunicorn -w 2 --timeout 60 -b  0.0.0.0:8088 --limit-request-line 0 --limit-request-field_size 0 superset:app >> superset.log 2>&1
