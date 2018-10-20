@@ -25,7 +25,6 @@
   apt:
     name: "{{ item }}"
   loop:
-    - software-properties-common
     - build-essential
     - libssl-dev
     # - libffi-dev
