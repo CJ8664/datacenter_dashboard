@@ -1,0 +1,16 @@
+- name: Install Zookeeper
+  become: true
+  apt:
+    name: zookeeperd
+
+- name: Copy configuration file
+  become: true
+  template:
+    src: 'zoo.cfg.j2'
+    dest: '/etc/zookeeper/conf/zoo.cfg'
+
+- name: Copy myid file
+  become: true
+  template:
+    src: 'myid.j2'
+    dest: '/var/lib/zookeeper/myid'

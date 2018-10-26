@@ -1,0 +1,46 @@
+- name: Install dependencies
+  become: true
+  apt:
+    name: software-properties-common
+
+- name: Add python apt_repository
+  become: true
+  apt_repository:
+    repo: ppa:jonathonf/python-3.6
+    state: present
+
+- name: Update apt packages
+  become: true
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400 #One day
+
+- name: Install Python 3.6
+  become: true
+  apt:
+    name: python3.6
+
+- name: OS dependencies for superset
+  become: true
+  apt:
+    name: "{{ item }}"
+  loop:
+    - build-essential
+    - libssl-dev
+    # - libffi-dev
+    - python-dev
+    - python3.6-dev
+    - python-pip
+    - python3-pip
+    - libsasl2-dev
+    - libldap2-dev
+
+- name: Download file for pip3.6
+  become: true
+  get_url:
+    url: https://bootstrap.pypa.io/get-pip.py
+    dest: "/tmp"
+
+- name: Compile pip3.6
+  become: true
+  shell: python3.6 /tmp/get-pip.py

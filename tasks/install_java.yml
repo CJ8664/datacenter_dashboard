@@ -1,0 +1,10 @@
+- name: Update and upgrade apt packages
+  become: true
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400 #One day
+
+- name: Install OpenJDK
+  become: true
+  apt:
+    name: default-jdk

@@ -1,0 +1,4 @@
+---
+- hosts: superset
+  tasks:
+    - include: ../tasks/stop_start_superset.yml

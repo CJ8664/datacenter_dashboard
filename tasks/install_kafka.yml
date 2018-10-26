@@ -1,0 +1,26 @@
+- name: Download Kafka {{ kafka_version }} and Unarchive
+  become: true
+  unarchive:
+    src: 'http://mirrors.koehn.com/apache/kafka/{{ kafka_version }}/kafka_{{ scala_version }}-{{ kafka_version }}.tgz'
+    dest: /usr/local
+    remote_src: yes
+
+- name: Copy server.properties file
+  become: true
+  template:
+    src: 'server.properties.j2'
+    dest: '/usr/local/kafka_{{ scala_version }}-{{ kafka_version }}/config/server.properties'
+
+- name: Create log directory
+  become: true
+  file:
+    path: /usr/local/kafka_{{ scala_version }}-{{ kafka_version }}/logs
+    state: directory
+    mode: 0755
+
+- name: Copy init.d file
+  become: true
+  template:
+    src: 'kafka.j2'
+    dest: '/etc/init.d/kafka'
+    mode: 0755
