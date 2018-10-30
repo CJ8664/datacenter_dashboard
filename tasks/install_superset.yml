@@ -3,6 +3,7 @@
   shell: pip3.6 install superset
 
 - name: Run Superset init commands
+  become: true
   shell: superset {{ item }}
   with_items:
     - db upgrade
