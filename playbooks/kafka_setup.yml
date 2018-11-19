@@ -6,5 +6,5 @@
   remote_user: root
   tasks:
     - include: ../tasks/install_java.yml
-    - include: ../tasks/open_kafka_ports.yml
+    # - include: ../tasks/open_kafka_ports.yml
     - include: ../tasks/install_kafka.yml

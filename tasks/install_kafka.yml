@@ -8,7 +8,7 @@
 - name: Copy server.properties file
   become: true
   template:
-    src: 'server.properties.j2'
+    src: '../templates/server.properties.j2'
     dest: '/usr/local/kafka_{{ scala_version }}-{{ kafka_version }}/config/server.properties'
 
 - name: Create log directory
@@ -21,6 +21,6 @@
 - name: Copy init.d file
   become: true
   template:
-    src: 'kafka.j2'
+    src: '../templates/kafka.j2'
     dest: '/etc/init.d/kafka'
     mode: 0755
