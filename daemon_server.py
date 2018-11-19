@@ -33,7 +33,7 @@ def generate_metric():
         Metric(-200, -100)
     ]
 
-    #print(metrics)
+    print(metrics)
     data = [random.randint(m.low, m.high) for m in metrics]
     endoded_data = ','.join(str(v) for v in data)
     server_id = multiprocessing.current_process().name
@@ -47,9 +47,9 @@ def worker_node():
     '''
 
     # ./kafka-topics.sh --create --zookeeper 184.73.102.168:2181,52.5.27.230:2181,54.159.237.81:2181 --replication-factor 3 --partitions 1 --topic test
-    # ./kafka-topics.sh --list --zookeeper 184.73.102.168:2181
-    producer = KafkaProducer(bootstrap_servers=kafka_ips, api_version=(2, 0, 0))
-
+    # ./kafka-topics.sh --list --zookeeper 184.73.102.168:2181
+    producer = KafkaProducer(bootstrap_servers=kafka_ips, api_version=(2, 0, 0))
+    
     while True:
         try:
             # print("Hello" + multiprocessing.current_process().name)
@@ -90,7 +90,7 @@ def main():
 
     server_count = args.server_count
     server_start = args.server_start
-    
+
     try:
         create_server_farm()
     except KeyboardInterrupt as ex:
