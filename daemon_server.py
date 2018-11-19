@@ -5,6 +5,8 @@ import multiprocessing
 import time
 from kafka import KafkaProducer
 import random
+import time
+import datetime
 
 server_count = 100
 server_start = 0
@@ -12,7 +14,8 @@ server_start = 0
 kafka_ips = ['35.211.13.141', '35.211.21.153', '35.211.37.39']
 
 class Metric:
-    def __init__(self, range_low, range_high):
+    def __init__(self, name, range_low, range_high):
+        self.name = name
         self.low = range_low
         self.high = range_high
 
@@ -26,19 +29,30 @@ def generate_metric():
     '''
 
     metrics = [
-        Metric(0, 10),
-        Metric(0, 100),
-        Metric(-100, 100),
-        Metric(100, 500),
-        Metric(-200, -100)
+        Metric("cpu_usage", 0, 10),
+        Metric("memory_utilization", 0, 100),
+        Metric("temperature", -100, 100),
+        Metric("disk_usage", 100, 500),
+        Metric("io_usage", -200, -100)
     ]
 
-    print(metrics)
-    data = [random.randint(m.low, m.high) for m in metrics]
-    endoded_data = ','.join(str(v) for v in data)
     server_id = multiprocessing.current_process().name
+    endoded_data = encode_as_json(server_id, metrics)
 
-    return "{}:{}".format(server_id, endoded_data)
+    return endoded_data
+
+def encode_as_json(server_id, metrics):
+
+    #data = [random.randint(m.low, m.high) for m in metrics]
+    timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%dT%H:%M:%SZ')
+    packet = {}
+    packet['server_id'] = server_id
+    packet['timestamp'] = timestamp
+
+    for m in metrics:
+        packet[m.name] = random.randint(m.low, m.high)
+
+    return packet
 
 
 def worker_node():
@@ -49,14 +63,14 @@ def worker_node():
     # ./kafka-topics.sh --create --zookeeper 184.73.102.168:2181,52.5.27.230:2181,54.159.237.81:2181 --replication-factor 3 --partitions 1 --topic test
     # ./kafka-topics.sh --list --zookeeper 184.73.102.168:2181
     producer = KafkaProducer(bootstrap_servers=kafka_ips, api_version=(2, 0, 0))
-    
+
     while True:
         try:
             # print("Hello" + multiprocessing.current_process().name)
             # producer.send('test', "Hello" + multiprocessing.current_process().name)
             data = generate_metric()
             print(data)
-            producer.send('test', str.encode(data))
+            producer.send('test', str(data))
             time.sleep(1)
         except KeyboardInterrupt as ex:
             break
