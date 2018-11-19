@@ -3,11 +3,12 @@
 import argparse
 import multiprocessing
 import time
-
 from kafka import KafkaProducer
+import random
 
 server_count = 100
 server_start = 0
+
 kafka_ips = ['35.211.13.141', '35.211.21.153', '35.211.37.39']
 
 class Metric:
@@ -17,6 +18,7 @@ class Metric:
 
     def __repr__(self):
         return "({}:{})".format(self.low, self.high)
+
 
 def generate_metric():
     '''
@@ -38,17 +40,23 @@ def generate_metric():
 
     return "{}:{}".format(server_id, endoded_data)
 
+
 def worker_node():
     '''
     The simulation of a single server
     '''
+
     # ./kafka-topics.sh --create --zookeeper 184.73.102.168:2181,52.5.27.230:2181,54.159.237.81:2181 --replication-factor 3 --partitions 1 --topic test
     # ./kafka-topics.sh --list --zookeeper 184.73.102.168:2181
     producer = KafkaProducer(bootstrap_servers=kafka_ips, api_version=(2, 0, 0))
+
     while True:
         try:
-            print("Hello" + multiprocessing.current_process().name)
-            producer.send('test', "Hello" + multiprocessing.current_process().name)
+            # print("Hello" + multiprocessing.current_process().name)
+            # producer.send('test', "Hello" + multiprocessing.current_process().name)
+            data = generate_metric()
+            print(data)
+            producer.send('test', str.encode(data))
             time.sleep(1)
         except KeyboardInterrupt as ex:
             break
@@ -82,7 +90,7 @@ def main():
 
     server_count = args.server_count
     server_start = args.server_start
-
+    
     try:
         create_server_farm()
     except KeyboardInterrupt as ex:
