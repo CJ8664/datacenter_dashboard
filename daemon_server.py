@@ -13,7 +13,9 @@ def worker_node():
     '''
     The simulation of a single server
     '''
-    producer = KafkaProducer(bootstrap_servers='152.46.16.59')
+    # ./kafka-topics.sh --create --zookeeper 184.73.102.168:2181,52.5.27.230:2181,54.159.237.81:2181 --replication-factor 3 --partitions 1 --topic test
+    # ./kafka-topics.sh --list --zookeeper 184.73.102.168:2181
+    producer = KafkaProducer(bootstrap_servers=['35.211.13.141', '35.211.21.153', '35.211.37.39'], api_version=(2, 0, 0))
     while True:
         try:
             print("Hello" + multiprocessing.current_process().name)
