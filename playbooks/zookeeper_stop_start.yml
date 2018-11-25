@@ -3,4 +3,5 @@
   remote_user: root
   serial: 1
   tasks:
-    - include: ../tasks/stop_start_zookeeper.yml
+    - include: ../tasks/start_zookeeper.yml
+    - include: ../tasks/stop_zookeeper.yml
