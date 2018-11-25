@@ -8,3 +8,4 @@
     - /usr/local/kafka_{{ scala_version }}-{{ kafka_version }}
     - /var/log/zookeeper
     - /etc/init.d/kafka
+    - /tmp/kafka-logs
