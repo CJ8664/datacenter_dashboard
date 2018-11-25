@@ -30,7 +30,7 @@ case "$1" in
 	;;
   stop)
 	log_daemon_msg "Stopping Kafka" "kafka" || true
-        ps ax | grep -i 'kafka\.Kafka' | grep java | grep -v grep |  awk '{print $1}' | xargs kill -SIGKILL
+        "$KAFKA_HOME/bin/kafka-server-stop.sh" "$KAFKA_HOME/config/server.properties"
 	log_end_msg 0 || true
 	;;
 
