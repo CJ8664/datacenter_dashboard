@@ -7,13 +7,13 @@
       "parseSpec": {
         "format": "json",
         "timestampSpec": {
-          "column": "timestamp",
+          "column": "time",
           "format": "auto"
         },
         "dimensionsSpec": {
           "dimensions": [
             { "name" : "server_id", "type" : "string" },
-            { "name" : "timestamp", "type" : "string" },
+            { "name" : "server_time", "type" : "string" },
             { "name" : "cpu_usage", "type" : "long" },
             { "name" : "memory_utilization", "type" : "long" },
             { "name" : "temperature", "type" : "long" },
@@ -23,23 +23,26 @@
         }
       }
     },
+    "metricsSpec" : [],
     "granularitySpec": {
       "type": "uniform",
-      "segmentGranularity": "HOUR",
-      "queryGranularity": "NONE"
+      "segmentGranularity": "MINUTE",
+      "queryGranularity": "NONE",
+      "rollup": false
     }
   },
   "tuningConfig": {
     "type": "kafka",
-    "maxRowsPerSegment": 5000000
+    "maxRowsPerSegment": 5000000,
+    "reportParseExceptions": true
   },
   "ioConfig": {
     "topic": "test",
-    "consumerProperties": {
-      "bootstrap.servers": "35.211.13.141:9092,35.211.21.153:9092,35.211.37.39:9092"
-    },
     "taskCount": 1,
     "replicas": 1,
-    "taskDuration": "PT1H"
+    "taskDuration": "PT1H",
+    "consumerProperties": {
+      "bootstrap.servers": "35.211.13.141:9092,35.211.21.153:9092,35.211.37.39:9092"
+    }
   }
 }
