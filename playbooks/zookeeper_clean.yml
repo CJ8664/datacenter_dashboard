@@ -1,0 +1,8 @@
+---
+- hosts: zookeeper
+  remote_user: root
+  serial: 1
+  tasks:
+    - include: ../tasks/stop_zookeeper.yml
+    - include: ../tasks/clean_zookeeper_data.yml
+    - include: ../tasks/start_zookeeper.yml
