@@ -6,8 +6,9 @@ import time
 from kafka import KafkaProducer
 import random
 import time
-import datetime
 import json
+
+from datetime import datetime
 
 server_count = 100
 server_start = 0
@@ -30,7 +31,7 @@ def generate_metric():
     '''
 
     metrics = [
-        Metric("cpu_usage", 0, 10),
+        Metric("cpu_usage", 0, 100),
         Metric("memory_utilization", 0, 100),
         Metric("temperature", -100, 100),
         Metric("disk_usage", 100, 500),
@@ -39,12 +40,11 @@ def generate_metric():
 
     server_id = multiprocessing.current_process().name
     endoded_data = encode_as_json(server_id, metrics)
-
     return endoded_data
 
 def encode_as_json(server_id, metrics):
 
-    timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%dT%H:%M:%SZ')
+    timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
     packet = {}
     packet['server_id'] = server_id
     packet['time'] = timestamp
@@ -72,7 +72,7 @@ def worker_node():
     while True:
         try:
             json_data = generate_metric()
-            # print(json_data)
+            print(json_data)
             producer.send('test4', json_data)
             # print(multiprocessing.current_process().name + " sent")
             time.sleep(1)
