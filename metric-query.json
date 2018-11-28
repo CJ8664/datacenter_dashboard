@@ -1,0 +1,15 @@
+{
+  "queryType" : "topN",
+  "dataSource" : "kafka-metrics",
+  "intervals" : ["2015-09-12/2025-09-13"],
+  "granularity" : "all",
+  "dimension" : "server_id",
+  "metric" : "count",
+  "threshold" : 100,
+  "aggregations" : [
+    {
+      "type" : "count",
+      "name" : "count"
+    }
+  ]
+}
