@@ -7,6 +7,7 @@ from kafka import KafkaProducer
 import random
 import time
 import datetime
+import json
 
 server_count = 100
 server_start = 0
@@ -43,16 +44,17 @@ def generate_metric():
 
 def encode_as_json(server_id, metrics):
 
-    #data = [random.randint(m.low, m.high) for m in metrics]
     timestamp = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%dT%H:%M:%SZ')
     packet = {}
     packet['server_id'] = server_id
-    packet['timestamp'] = timestamp
+    packet['time'] = timestamp
+    packet['server_time'] = timestamp
 
     for m in metrics:
         packet[m.name] = random.randint(m.low, m.high)
 
-    return packet
+    json_data = json.dumps(packet, encoding="utf-8")
+    return json_data
 
 
 def worker_node():
@@ -64,15 +66,15 @@ def worker_node():
     # ./kafka-topics.sh --create --zookeeper 184.73.102.168:2181,52.5.27.230:2181,54.159.237.81:2181 --replication-factor 1 --partitions 1 --topic test
     # ./kafka-topics.sh --create --zookeeper 184.73.102.168:2181,52.5.27.230:2181,54.159.237.81:2181 --replication-factor 3 --partitions 1 --topic test
     # ./kafka-topics.sh --list --zookeeper 184.73.102.168:2181
+    # ./kafka-topics.sh --delete --zookeeper 184.73.102.168:2181 --topic test
     producer = KafkaProducer(bootstrap_servers=kafka_ips)
 
     while True:
         try:
-            # print("Hello" + multiprocessing.current_process().name)
-            # producer.send('test', "Hello" + multiprocessing.current_process().name)
-            data = generate_metric()
-            print(data)
-            producer.send('test', str(data))
+            json_data = generate_metric()
+            # print(json_data)
+            producer.send('test4', json_data)
+            # print(multiprocessing.current_process().name + " sent")
             time.sleep(1)
         except KeyboardInterrupt as ex:
             break
