@@ -16,6 +16,8 @@ server_start = 1
 datacenter_count = 5
 datacenter_start = 1
 
+topic_name = 'datacenter_metrics'
+
 kafka_ips = ['35.211.13.141', '35.211.21.153', '35.211.37.39']
 log_levels = ['INFO','DEBUG','WARN','ERROR','CRITICAL']
 log_texts = ['asdasdasd', 'adafvweewe']
@@ -73,7 +75,7 @@ def encode_as_json(datacenter_id, server_id, metrics):
         else:
             packet[m.name] = random.randint(m.low, m.high)
 
-    json_data = json.dumps(packet, encoding="utf-8")
+    json_data = json.dumps(packet)
     return json_data
 
 
@@ -93,7 +95,7 @@ def worker_node():
         try:
             json_data = generate_metric()
             print(json_data)
-            producer.send('datacenter_metrics', json_data)
+            producer.send(topic_name, json_data)
             # print(multiprocessing.current_process().name + " sent")
             time.sleep(1)
         except KeyboardInterrupt as ex:
@@ -142,7 +144,6 @@ def main():
         create_datacenters()
     except KeyboardInterrupt as ex:
         print('\nStopping datacenters')
-
 
 if __name__ == '__main__':
     main()
