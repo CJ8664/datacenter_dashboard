@@ -47,19 +47,19 @@ def generate_metric():
     ]
 
     process_name = multiprocessing.current_process().name.split('#')
-    data_center_id = process_name[0]
+    datacenter_id = process_name[0]
     server_id = process_name[1]
 
-    endoded_data = encode_as_json(data_center_id, server_id, metrics)
+    endoded_data = encode_as_json(datacenter_id, server_id, metrics)
 
     return endoded_data
 
-def encode_as_json(data_center_id, server_id, metrics):
+def encode_as_json(datacenter_id, server_id, metrics):
 
     timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
     packet = OrderedDict()
     packet['server_id'] = server_id
-    packet['data_center_id'] = data_center_id
+    packet['datacenter_id'] = datacenter_id
     packet['time'] = timestamp
 
     for m in metrics:
@@ -110,7 +110,7 @@ def create_datacenters():
     servers = []
     for datacenter_idx in range(datacenter_count):
         for server_idx in range(server_count):
-            servers.append(multiprocessing.Process(name='data_center_{}#server_{}'.format(datacenter_idx + datacenter_start , server_idx + server_start), target=worker_node))
+            servers.append(multiprocessing.Process(name='datacenter_{}#server_{}'.format(datacenter_idx + datacenter_start , server_idx + server_start), target=worker_node))
 
     for server in servers:
         server.start()
