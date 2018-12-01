@@ -8,12 +8,17 @@ import random
 import time
 import json
 
+from collections import OrderedDict
 from datetime import datetime
 
 server_count = 100
-server_start = 0
+server_start = 1
+datacenter_count = 5
+datacenter_start = 1
 
 kafka_ips = ['35.211.13.141', '35.211.21.153', '35.211.37.39']
+log_levels = ['INFO','DEBUG','WARN','ERROR','CRITICAL']
+log_texts = ['asdasdasd', 'adafvweewe']
 
 class Metric:
     def __init__(self, name, range_low, range_high):
@@ -27,31 +32,46 @@ class Metric:
 
 def generate_metric():
     '''
-    Actual data, seperated by ,
+    Actual data in dictionary
     '''
 
     metrics = [
         Metric("cpu_usage", 0, 100),
-        Metric("memory_utilization", 0, 100),
-        Metric("temperature", -100, 100),
+        Metric("memory_usage", 0, 100),
+        Metric("temperature", 0, 100),
         Metric("disk_usage", 100, 500),
-        Metric("io_usage", -200, -100)
+        Metric("io_usage", 0, 100),
+        Metric("heartbeat", 0, 1),
+        Metric("log_level", 0, 4),
+        Metric("log_text", 0, 1)
     ]
 
-    server_id = multiprocessing.current_process().name
-    endoded_data = encode_as_json(server_id, metrics)
+    process_name = multiprocessing.current_process().name.split('#')
+    data_center_id = process_name[0]
+    server_id = process_name[1]
+
+    endoded_data = encode_as_json(data_center_id, server_id, metrics)
+
     return endoded_data
 
-def encode_as_json(server_id, metrics):
+def encode_as_json(data_center_id, server_id, metrics):
 
     timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
-    packet = {}
+    packet = OrderedDict()
     packet['server_id'] = server_id
+    packet['data_center_id'] = data_center_id
     packet['time'] = timestamp
-    packet['server_time'] = timestamp
 
     for m in metrics:
-        packet[m.name] = random.randint(m.low, m.high)
+        if (m.name == "log_level"):
+            packet[m.name] = log_levels[random.randint(m.low, m.high)]
+        elif (m.name == "heartbeat"):
+            # Need randomization
+            packet[m.name] = random.randint(m.low, m.high)
+        elif (m.name == "log_text"):
+            packet[m.name] = log_texts[random.randint(m.low, m.high)]
+        else:
+            packet[m.name] = random.randint(m.low, m.high)
 
     json_data = json.dumps(packet, encoding="utf-8")
     return json_data
@@ -73,7 +93,7 @@ def worker_node():
         try:
             json_data = generate_metric()
             print(json_data)
-            producer.send('test4', json_data)
+            producer.send('datacenter_metrics', json_data)
             # print(multiprocessing.current_process().name + " sent")
             time.sleep(1)
         except KeyboardInterrupt as ex:
@@ -82,12 +102,16 @@ def worker_node():
             print(exp)
 
 
-def create_server_farm():
+def create_datacenters():
     '''
     The function responsible to start threads that will simulate the servers
     '''
 
-    servers = [ multiprocessing.Process(name='server_{}'.format(server_start + num), target=worker_node) for num in range(server_count)]
+    servers = []
+    for datacenter_idx in range(datacenter_count):
+        for server_idx in range(server_count):
+            servers.append(multiprocessing.Process(name='data_center_{}#server_{}'.format(datacenter_idx + datacenter_start , server_idx + server_start), target=worker_node))
+
     for server in servers:
         server.start()
     for server in servers:
@@ -98,21 +122,26 @@ def main():
     '''
     Start point of the program and master of all child threaads
     '''
-    global server_count, server_start, kill_switch
+    global server_count, server_start, datacenter_count, datacenter_start, kill_switch
 
     parser = argparse.ArgumentParser(description='This program generates synthetic data for the Kafka Stream simulating the Server Farm')
-    parser.add_argument('-c', action='store', dest='server_count', help='Server count', required=True, type=int)
-    parser.add_argument('-s', action='store', dest='server_start', help='Server count', required=True, type=int)
+    parser.add_argument('--server-count', action='store', dest='server_count', help='Server count', required=True, type=int)
+    parser.add_argument('--server-start', action='store', dest='server_start', help='Server start index', required=True, type=int)
+    parser.add_argument('--datacenter-count', action='store', dest='datacenter_count', help='Datacenter count', required=True, type=int)
+    parser.add_argument('--datacenter-start', action='store', dest='datacenter_start', help='Datacenter start index', required=True, type=int)
 
     args = parser.parse_args()
 
     server_count = args.server_count
     server_start = args.server_start
 
+    datacenter_count = args.datacenter_count
+    datacenter_start = args.datacenter_start
+
     try:
-        create_server_farm()
+        create_datacenters()
     except KeyboardInterrupt as ex:
-        print('\nStopping Server Farm')
+        print('\nStopping datacenters')
 
 
 if __name__ == '__main__':
