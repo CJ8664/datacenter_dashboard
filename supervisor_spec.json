@@ -1,7 +1,7 @@
 {
   "type": "kafka",
   "dataSchema": {
-    "dataSource": "kafka-metrics",
+    "dataSource": "datacenter-metrics",
     "parser": {
       "type": "string",
       "parseSpec": {
