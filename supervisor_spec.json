@@ -13,12 +13,18 @@
         "dimensionsSpec": {
           "dimensions": [
             { "name" : "server_id", "type" : "string" },
-            { "name" : "server_time", "type" : "string" },
+            { "name" : "datacenter_id", "type" : "string" },
+            { "name" : "log_level", "type" : "string" },
+            { "name" : "log_text", "type" : "string" },
+            { "name" : "heartbeat", "type" : "long" },
             { "name" : "cpu_usage", "type" : "long" },
-            { "name" : "memory_utilization", "type" : "long" },
+            { "name" : "memory_usage", "type" : "long" },
             { "name" : "temperature", "type" : "long" },
             { "name" : "disk_usage", "type" : "long" },
             { "name" : "io_usage", "type" : "long" }
+          ],
+          "dimensionExclusions": [
+            "time"
           ]
         }
       }
@@ -37,7 +43,7 @@
     "reportParseExceptions": true
   },
   "ioConfig": {
-    "topic": "test4",
+    "topic": "datacenter_metrics",
     "taskCount": 1,
     "replicas": 1,
     "taskDuration": "PT1H",
