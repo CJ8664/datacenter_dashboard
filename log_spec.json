@@ -1,7 +1,7 @@
 {
   "type": "kafka",
   "dataSchema": {
-    "dataSource": "logs-topic",
+    "dataSource": "datacenter--metrics",
     "parser": {
       "type": "string",
       "parseSpec": {
@@ -42,7 +42,7 @@
     "reportParseExceptions": true
   },
   "ioConfig": {
-    "topic": "datacenter--metrics",
+    "topic": "logs-topic",
     "taskCount": 1,
     "replicas": 1,
     "taskDuration": "PT1H",
