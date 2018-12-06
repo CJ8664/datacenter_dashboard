@@ -17,7 +17,7 @@ server_start = 1
 datacenter_count = 5
 datacenter_start = 1
 
-topic_name = 'datacenter_metrics'
+topic_name = 'datacenter--metrics'
 
 kafka_ips = ['35.211.13.141', '35.211.21.153', '35.211.37.39']
 log_levels = ['INFO','DEBUG','WARN','ERROR','CRITICAL']
@@ -44,9 +44,9 @@ def generate_metric():
         Metric("temperature", 60, 2),
         Metric("disk_usage", 55, 3),
         Metric("io_usage", 50, 20),
-        Metric("heartbeat", 0, 1),
+        Metric("heartbeat", 0, 2),
         Metric("log_level", 0, 4),
-        Metric("log_text", 0, 1)
+        Metric("log_text", 0, 2)
     ]
 
     process_name = multiprocessing.current_process().name.split('#')
@@ -59,11 +59,11 @@ def generate_metric():
 
 def encode_as_json(datacenter_id, server_id, metrics):
 
-    timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
+    timestamp = datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
     packet = OrderedDict()
     packet['server_id'] = server_id
     packet['datacenter_id'] = datacenter_id
-    packet['time'] = timestamp
+    packet['server_time'] = timestamp
 
     for m in metrics:
         if (m.name == "log_level"):
@@ -94,7 +94,7 @@ def worker_node():
     # ./kafka-console-producer.sh --broker-list 35.211.13.141:9092 --topic test
     # ./kafka-console-consumer.sh --bootstrap-server 35.211.13.141:9092 --topic datacenter_metrics --from-beginning
     # ./kafka-topics.sh --create --zookeeper 35.185.126.8:2181 --replication-factor 1 --partitions 1 --topic test
-    # ./kafka-topics.sh --create --zookeeper 35.185.126.8:2181 --replication-factor 3 --partitions 1 --topic datacenter_metrics
+    # ./kafka-topics.sh --create --zookeeper 35.185.126.8:2181 --replication-factor 3 --partitions 1 --topic datacenter-metrics
     # ./kafka-topics.sh --list --zookeeper 35.185.126.8:2181
     # ./kafka-topics.sh --delete --zookeeper 35.185.126.8:2181 --topic test
     producer = KafkaProducer(bootstrap_servers=kafka_ips)
