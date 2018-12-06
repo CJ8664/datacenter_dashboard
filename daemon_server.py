@@ -46,7 +46,7 @@ def generate_metric():
         Metric("io_usage", 50, 20),
         Metric("heartbeat", 0, 2),
         Metric("log_level", 0, 5),
-        Metric("log_text", 0, 5)
+        Metric("log_text", 0, 4)
     ]
 
     process_name = multiprocessing.current_process().name.split('#')
