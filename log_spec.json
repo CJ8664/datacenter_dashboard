@@ -1,7 +1,7 @@
 {
   "type": "kafka",
   "dataSchema": {
-    "dataSource": "datacenter--metrics",
+    "dataSource": "logs_source",
     "parser": {
       "type": "string",
       "parseSpec": {
@@ -23,15 +23,6 @@
       { "type" : "count", "name" : "rows" },
       { "type" : "longSum", "name" : "tot", "fieldName" : "cpu_usage" }
     ],
-    "postAggregations" : [{
-      "type"   : "arithmetic",
-      "name"   : "average_cpu_usage",
-      "fn"     : "/",
-      "fields" : [
-        { "type" : "fieldAccess", "name" : "tot", "fieldName" : "tot" },
-        { "type" : "fieldAccess", "name" : "rows", "fieldName" : "rows" }
-      ]
-    }],
     "granularitySpec": {
       "rollup": true
     }
