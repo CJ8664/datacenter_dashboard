@@ -10,6 +10,7 @@ import json
 
 from collections import OrderedDict
 from datetime import datetime
+from numpy import random
 
 server_count = 100
 server_start = 1
@@ -23,13 +24,13 @@ log_levels = ['INFO','DEBUG','WARN','ERROR','CRITICAL']
 log_texts = ['asdasdasd', 'adafvweewe']
 
 class Metric:
-    def __init__(self, name, range_low, range_high):
+    def __init__(self, name, mean, stddev):
         self.name = name
-        self.low = range_low
-        self.high = range_high
+        self.mean = range_low
+        self.stddev = range_high
 
     def __repr__(self):
-        return "({}:{})".format(self.low, self.high)
+        return "({}:{})".format(self.mean, self.stddev)
 
 
 def generate_metric():
@@ -38,11 +39,11 @@ def generate_metric():
     '''
 
     metrics = [
-        Metric("cpu_usage", 0, 100),
-        Metric("memory_usage", 0, 100),
-        Metric("temperature", 0, 100),
-        Metric("disk_usage", 100, 500),
-        Metric("io_usage", 0, 100),
+        Metric("cpu_usage", 60, 5),
+        Metric("memory_usage", 50, 10),
+        Metric("temperature", 60, 2),
+        Metric("disk_usage", 55, 3),
+        Metric("io_usage", 50, 20),
         Metric("heartbeat", 0, 1),
         Metric("log_level", 0, 4),
         Metric("log_text", 0, 1)
@@ -66,17 +67,24 @@ def encode_as_json(datacenter_id, server_id, metrics):
 
     for m in metrics:
         if (m.name == "log_level"):
-            packet[m.name] = log_levels[random.randint(m.low, m.high)]
+            packet[m.name] = log_levels[random.randint(m.mean, m.stddev)]
         elif (m.name == "heartbeat"):
             # Need randomization
-            packet[m.name] = random.randint(m.low, m.high)
+            packet[m.name] = random.randint(m.mean, m.stddev)
         elif (m.name == "log_text"):
-            packet[m.name] = log_texts[random.randint(m.low, m.high)]
+            packet[m.name] = log_texts[random.randint(m.mean, m.stddev)]
         else:
-            packet[m.name] = random.randint(m.low, m.high)
+            packet[m.name] = get_normal_random(m.mean, m.stddev)
 
     json_data = json.dumps(packet)
     return json_data
+
+def get_normal_random(mu, var):
+    '''
+    Helper method to generate random number
+    given the mean and standard deviation=1
+    '''
+    return int(random.normal(mu, var, 1))
 
 
 def worker_node():
@@ -94,8 +102,8 @@ def worker_node():
     while True:
         try:
             json_data = generate_metric()
-            print(json_data)
-            producer.send(topic_name, json_data)
+            # print(json_data)
+            # producer.send(topic_name, json_data)
             # print(multiprocessing.current_process().name + " sent")
             time.sleep(1)
         except KeyboardInterrupt as ex:
