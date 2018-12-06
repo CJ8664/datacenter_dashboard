@@ -17,6 +17,7 @@ server_start = 1
 datacenter_count = 5
 datacenter_start = 1
 
+producer = None
 topic_name = 'datacenter-metrics'
 
 kafka_ips = ['35.211.13.141', '35.211.21.153', '35.211.37.39']
@@ -91,8 +92,6 @@ def worker_node():
     '''
     The simulation of a single server
     '''
-    producer = KafkaProducer(bootstrap_servers=kafka_ips)
-
     while True:
         try:
             json_data = generate_metric()
@@ -109,8 +108,11 @@ def create_datacenters():
     '''
     The function responsible to start threads that will simulate the servers
     '''
-
+    global producer
     servers = []
+
+    producer = KafkaProducer(bootstrap_servers=kafka_ips)
+    
     for datacenter_idx in range(datacenter_count):
         for server_idx in range(server_count):
             servers.append(multiprocessing.Process(name='datacenter_{}#server_{}'.format(datacenter_idx + datacenter_start , server_idx + server_start), target=worker_node))
