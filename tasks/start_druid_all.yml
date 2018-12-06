@@ -1,5 +1,5 @@
 - name: Stop all the druid servers
   become: true
-  shell: "sh /home/vijayhebbar91/druid-0.12.3/start_all.sh"
+  shell: "/home/vijayhebbar91/druid-0.12.3/bin/start_all.sh"
   ignore_errors: true
 
