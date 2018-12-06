@@ -1,0 +1,24 @@
+- name: Copy kafka_stream_helper file
+  become: true
+  template:
+    src: '../templates/kafka_stream_helper.j2'
+    dest: '/etc/init.d/kafka_stream_helper'
+    mode: 0755
+
+- name: Copy KSH service start file
+  become: true
+  template:
+    src: '../templates/ksh_server_start.j2'
+    dest: '/home/vijayhebbar91/ksh_server_start.sh'
+    mode: 0755
+
+- name: Copy KSH service stop file
+  become: true
+  template:
+    src: '../templates/ksh_server_stop.j2'
+    dest: '/home/vijayhebbar91/ksh_server_stop.sh'
+    mode: 0755
+
+- name: Reload Service definition
+  become: true
+  shell: systemctl daemon-reload

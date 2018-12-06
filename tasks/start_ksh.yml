@@ -1,0 +1,6 @@
+- name: Start the Kafka Stream helper service.
+  become: true
+  service:
+    name: kafka_stream_helper
+    state: started
+    enabled: yes

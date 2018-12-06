@@ -1,0 +1,5 @@
+---
+- hosts: kafka_stream
+  tasks:
+    - include: ../tasks/stop_ksh.yml
+    - include: ../tasks/start_ksh.yml
