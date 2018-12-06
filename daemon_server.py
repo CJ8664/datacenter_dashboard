@@ -102,8 +102,8 @@ def worker_node():
     while True:
         try:
             json_data = generate_metric()
-            print(json_data)
-            # producer.send(topic_name, json_data)
+            # print(json_data)
+            producer.send(topic_name, json_data)
             # print(multiprocessing.current_process().name + " sent")
             time.sleep(1)
         except KeyboardInterrupt as ex:
@@ -122,6 +122,7 @@ def create_datacenters():
         for server_idx in range(server_count):
             servers.append(multiprocessing.Process(name='datacenter_{}#server_{}'.format(datacenter_idx + datacenter_start , server_idx + server_start), target=worker_node))
 
+    print("Started sending data")
     for server in servers:
         server.start()
     for server in servers:
