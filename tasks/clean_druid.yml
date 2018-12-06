@@ -10,4 +10,4 @@
 
 - name: Initialize the var and log directories
   become: true
-  shell: "./home/vijayhebbar91/druid-0.12.3/bin/init"
+  shell: "/home/vijayhebbar91/druid-0.12.3/bin/init"
