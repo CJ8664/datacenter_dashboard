@@ -26,8 +26,8 @@ log_texts = ['asdasdasd', 'adafvweewe']
 class Metric:
     def __init__(self, name, mean, stddev):
         self.name = name
-        self.mean = range_low
-        self.stddev = range_high
+        self.mean = mean
+        self.stddev = stddev
 
     def __repr__(self):
         return "({}:{})".format(self.mean, self.stddev)
@@ -102,7 +102,7 @@ def worker_node():
     while True:
         try:
             json_data = generate_metric()
-            # print(json_data)
+            print(json_data)
             # producer.send(topic_name, json_data)
             # print(multiprocessing.current_process().name + " sent")
             time.sleep(1)
