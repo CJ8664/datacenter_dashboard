@@ -84,11 +84,11 @@ def worker_node():
     The simulation of a single server
     '''
     # ./kafka-console-producer.sh --broker-list 35.211.13.141:9092 --topic test
-    # ./kafka-console-consumer.sh --bootstrap-server 35.211.13.141:9092 --topic test --from-beginning
-    # ./kafka-topics.sh --create --zookeeper 184.73.102.168:2181,52.5.27.230:2181,54.159.237.81:2181 --replication-factor 1 --partitions 1 --topic test
-    # ./kafka-topics.sh --create --zookeeper 184.73.102.168:2181,52.5.27.230:2181,54.159.237.81:2181 --replication-factor 3 --partitions 1 --topic test
-    # ./kafka-topics.sh --list --zookeeper 184.73.102.168:2181
-    # ./kafka-topics.sh --delete --zookeeper 184.73.102.168:2181 --topic test
+    # ./kafka-console-consumer.sh --bootstrap-server 35.211.13.141:9092 --topic datacenter_metrics --from-beginning
+    # ./kafka-topics.sh --create --zookeeper 35.185.126.8:2181 --replication-factor 1 --partitions 1 --topic test
+    # ./kafka-topics.sh --create --zookeeper 35.185.126.8:2181 --replication-factor 3 --partitions 1 --topic datacenter_metrics
+    # ./kafka-topics.sh --list --zookeeper 35.185.126.8:2181
+    # ./kafka-topics.sh --delete --zookeeper 35.185.126.8:2181 --topic test
     producer = KafkaProducer(bootstrap_servers=kafka_ips)
 
     while True:
