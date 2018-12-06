@@ -1,14 +1,14 @@
 {
   "type": "kafka",
   "dataSchema": {
-    "dataSource": "datacenter-metrics",
+    "dataSource": "datacenter--metrics",
     "parser": {
       "type": "string",
       "parseSpec": {
         "format": "json",
         "timestampSpec": {
-          "column": "time",
-          "format": "auto"
+          "column": "server_time",
+          "format": "iso"
         },
         "dimensionsSpec": {
           "dimensions": [
@@ -22,19 +22,26 @@
             { "name" : "temperature", "type" : "long" },
             { "name" : "disk_usage", "type" : "long" },
             { "name" : "io_usage", "type" : "long" }
-          ],
-          "dimensionExclusions": [
-            "time"
           ]
         }
       }
     },
-    "metricsSpec" : [],
+    "metricsSpec": [],
+    "aggregations" : [
+      { "type" : "count", "name" : "rows" },
+      { "type" : "longSum", "name" : "tot", "fieldName" : "cpu_usage" }
+    ],
+    "postAggregations" : [{
+      "type"   : "arithmetic",
+      "name"   : "average_cpu_usage",
+      "fn"     : "/",
+      "fields" : [
+        { "type" : "fieldAccess", "name" : "tot", "fieldName" : "tot" },
+        { "type" : "fieldAccess", "name" : "rows", "fieldName" : "rows" }
+      ]
+    }],
     "granularitySpec": {
-      "type": "uniform",
-      "segmentGranularity": "MINUTE",
-      "queryGranularity": "NONE",
-      "rollup": false
+      "rollup": true
     }
   },
   "tuningConfig": {
@@ -43,7 +50,7 @@
     "reportParseExceptions": true
   },
   "ioConfig": {
-    "topic": "datacenter_metrics",
+    "topic": "datacenter--metrics",
     "taskCount": 1,
     "replicas": 1,
     "taskDuration": "PT1H",
