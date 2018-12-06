@@ -1,0 +1,18 @@
+---
+- hosts: druid
+  remote_user: root
+  serial: 1
+  tasks:
+    - include: ../tasks/stop_druid_all.yml
+
+# - hosts: druid
+#   remote_user: root
+#   serial: 1
+#   tasks:
+#     - include: ../tasks/clean_druid.yml
+
+- hosts: druid
+  remote_user: root
+  serial: 1
+  tasks:
+    - include: ../tasks/start_druid_all.yml

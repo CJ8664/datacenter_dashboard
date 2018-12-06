@@ -1,0 +1,5 @@
+- name: Stop all the druid servers
+  become: true
+  shell: "sh ~/druid-0.12.3/stop_all.sh"
+  ignore_errors: true
+
