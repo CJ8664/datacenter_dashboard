@@ -17,11 +17,11 @@ server_start = 1
 datacenter_count = 5
 datacenter_start = 1
 
-topic_name = 'datacenter--metrics'
+topic_name = 'datacenter-metrics'
 
 kafka_ips = ['35.211.13.141', '35.211.21.153', '35.211.37.39']
 log_levels = ['INFO','DEBUG','WARN','ERROR','CRITICAL']
-log_texts = ['asdasdasd', 'adafvweewe']
+log_texts = ['Connected to Database', 'Order confirmation saved', 'Unable to find product', 'Trasaction failed ID#2343213']
 
 class Metric:
     def __init__(self, name, mean, stddev):
@@ -46,7 +46,7 @@ def generate_metric():
         Metric("io_usage", 50, 20),
         Metric("heartbeat", 0, 2),
         Metric("log_level", 0, 5),
-        Metric("log_text", 0, 2)
+        Metric("log_text", 0, 5)
     ]
 
     process_name = multiprocessing.current_process().name.split('#')
@@ -91,12 +91,6 @@ def worker_node():
     '''
     The simulation of a single server
     '''
-    # ./kafka-console-producer.sh --broker-list 35.211.13.141:9092 --topic test
-    # ./kafka-console-consumer.sh --bootstrap-server 35.211.13.141:9092 --topic datacenter_metrics --from-beginning
-    # ./kafka-topics.sh --create --zookeeper 35.185.126.8:2181 --replication-factor 1 --partitions 1 --topic test
-    # ./kafka-topics.sh --create --zookeeper 35.185.126.8:2181 --replication-factor 3 --partitions 1 --topic datacenter-metrics
-    # ./kafka-topics.sh --list --zookeeper 35.185.126.8:2181
-    # ./kafka-topics.sh --delete --zookeeper 35.185.126.8:2181 --topic test
     producer = KafkaProducer(bootstrap_servers=kafka_ips)
 
     while True:
@@ -104,7 +98,6 @@ def worker_node():
             json_data = generate_metric()
             # print(json_data)
             producer.send(topic_name, json_data)
-            # print(multiprocessing.current_process().name + " sent")
             time.sleep(1)
         except KeyboardInterrupt as ex:
             break
