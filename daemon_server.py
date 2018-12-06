@@ -100,8 +100,10 @@ def worker_node():
             producer.send(topic_name, json_data)
             time.sleep(1)
         except KeyboardInterrupt as ex:
+            producer.close()
             break
         except Exception as exp:
+            producer.close()
             print(exp)
 
 
