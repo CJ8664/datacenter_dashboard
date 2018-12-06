@@ -1,0 +1,59 @@
+{
+  "type": "kafka",
+  "dataSchema": {
+    "dataSource": "metrics-topic",
+    "parser": {
+      "type": "string",
+      "parseSpec": {
+        "format": "json",
+        "timestampSpec": {
+          "column": "server_time",
+          "format": "iso"
+        },
+        "dimensionsSpec": {
+          "dimensions": [
+            { "name" : "server_id", "type" : "string" },
+            { "name" : "datacenter_id", "type" : "string" },
+            { "name" : "heartbeat", "type" : "long" },
+            { "name" : "cpu_usage", "type" : "long" },
+            { "name" : "memory_usage", "type" : "long" },
+            { "name" : "temperature", "type" : "long" },
+            { "name" : "disk_usage", "type" : "long" },
+            { "name" : "io_usage", "type" : "long" }
+          ]
+        }
+      }
+    },
+    "metricsSpec": [],
+    "aggregations" : [
+      { "type" : "count", "name" : "rows" },
+      { "type" : "longSum", "name" : "tot", "fieldName" : "cpu_usage" }
+    ],
+    "postAggregations" : [{
+      "type"   : "arithmetic",
+      "name"   : "average_cpu_usage",
+      "fn"     : "/",
+      "fields" : [
+        { "type" : "fieldAccess", "name" : "tot", "fieldName" : "tot" },
+        { "type" : "fieldAccess", "name" : "rows", "fieldName" : "rows" }
+      ]
+    }],
+    "granularitySpec": {
+      "rollup": true
+    }
+  },
+  "tuningConfig": {
+    "type": "kafka",
+    "maxRowsPerSegment": 5000000,
+    "reportParseExceptions": true
+  },
+  "ioConfig": {
+    "topic": "datacenter--metrics",
+    "taskCount": 1,
+    "replicas": 1,
+    "taskDuration": "PT1H",
+    "consumerProperties": {
+      "bootstrap.servers": "35.211.13.141:9092,35.211.21.153:9092,35.211.37.39:9092"
+    }
+  }
+}
