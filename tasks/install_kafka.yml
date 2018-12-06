@@ -24,3 +24,16 @@
     src: '../templates/kafka.j2'
     dest: '/etc/init.d/kafka'
     mode: 0755
+
+- name: Change limit of open files
+  become: true
+  shell: ulimit -n 128000
+
+- name: Change limit of open files in /etc/security/limits.conf
+  become: true
+  lineinfile:
+    path: /etc/security/limits.conf
+    line: "{{ item }}"
+  loop:
+    - "kafka - nofile 128000"
+    - "root - nofile 128000"
