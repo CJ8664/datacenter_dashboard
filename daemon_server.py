@@ -19,7 +19,7 @@ datacenter_start = 1
 
 topic_name = 'datacenter-metrics'
 
-kafka_ips = ['35.211.13.141', '35.211.21.153', '35.211.37.39']
+kafka_ips = ['35.211.13.141', '35.211.21.153', '35.211.37.39','35.211.83.103','35.211.51.202','35.211.149.62']
 log_levels = ['INFO','DEBUG','WARN','ERROR','CRITICAL']
 log_texts = ['Connected to Database', 'Order confirmation saved', 'Unable to find product', 'Trasaction failed ID#2343213']
 
