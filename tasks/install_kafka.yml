@@ -24,15 +24,3 @@
     src: '../templates/kafka.j2'
     dest: '/etc/init.d/kafka'
     mode: 0755
-
-- name: Change limit of open files
-  become: true
-  shell: sysctl -w fs.file-max=300000
-
-- name: Change limit of open files in /etc/sysctl.conf
-  become: true
-  shell: echo "fs.file-max = 300000" > /etc/sysctl.conf
-
-- name: Sync settings
-  become: true
-  shell: sysctl -p
