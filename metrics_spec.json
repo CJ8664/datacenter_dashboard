@@ -32,7 +32,8 @@
   "tuningConfig": {
     "type": "kafka",
     "maxRowsPerSegment": 5000000,
-    "reportParseExceptions": true
+    "reportParseExceptions": true,
+    "resetOffsetAutomatically": true
   },
   "ioConfig": {
     "topic": "metrics-topic",
