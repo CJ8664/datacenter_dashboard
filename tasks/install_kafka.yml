@@ -24,3 +24,28 @@
     src: '../templates/kafka.j2'
     dest: '/etc/init.d/kafka'
     mode: 0755
+
+- name: Remove to /etc/security/limits.conf
+  become: true
+  lineinfile:
+    path: /etc/security/limits.conf
+    line: "{{ item }}"
+  loop:
+    - "* soft nofile 2097152"
+    - "* hard nofile 2097152"
+
+- name: Add to /etc/pam.d/common-session
+  become: true
+  lineinfile:
+    path: /etc/pam.d/common-session
+    line: "session required pam_limits.so"
+
+- name: Add to /etc/sysctl.conf
+  become: true
+  lineinfile:
+    path: /etc/sysctl.conf
+    line: "fs.file-max = 2097152"
+
+- name: Sync settings
+  become: true
+  shell: sysctl -p
