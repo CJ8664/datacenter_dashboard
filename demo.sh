@@ -33,10 +33,28 @@ Scenarios
 - Kill the leader, new leader is elected, Bring back the dead, no change leader
 - Kill Injestion service
 
+nohup python daemon_server.py --server-count 100 --server-start 1 --datacenter-count 5 --datacenter-start 1 &
+nohup python daemon_server.py --server-count 100 --server-start 1 --datacenter-count 25 --datacenter-start 6 &
 
-Before demo:
-  - Run 500 python
-  - Show ZK follower leader
-  ./kafka-console-consumer.sh --bootstrap-server 35.211.13.141:9092 --topic datacenter-metrics
-  ./kafka-console-consumer.sh --bootstrap-server 35.211.13.141:9092 --topic logs-topic
-  ./kafka-console-consumer.sh --bootstrap-server 35.211.13.141:9092 --topic metrics-topic
+Sample data {"server_id": "server_37", "datacenter_id": "datacenter_2", "time": "2018-12-05T22:22:39", "cpu_usage": 58, "memory_usage": 52, "temperature": 56, "disk_usage": 53, "io_usage": 52, "heartbeat": 0, "log_level": "WARN", "log_text": "asdasdasd"}
+
+./kafka-console-consumer.sh --bootstrap-server 35.211.13.141:9092 --topic datacenter-metrics
+./kafka-console-consumer.sh --bootstrap-server 35.211.13.141:9092 --topic logs-topic
+./kafka-console-consumer.sh --bootstrap-server 35.211.13.141:9092 --topic metrics-topic
+
+echo stat | nc 35.185.126.8 2181 | grep -i mode
+echo stat | nc 35.237.132.111 2181 | grep -i mode
+echo stat | nc 35.243.248.64 2181 | grep -i mode
+
+ansible-playbook -i inventory.yml playbooks/leader_kill.yml
+ansible-playbook -i inventory.yml playbooks/leader_start.yml
+
+echo stat | nc 35.185.126.8 2181 | grep -i mode
+echo stat | nc 35.237.132.111 2181 | grep -i mode
+echo stat | nc 35.243.248.64 2181 | grep -i mode
+
+ansible-playbook -i inventory.yml playbooks/ksh_kill.yml
+ansible-playbook -i inventory.yml playbooks/ksh_start.yml
+
+curl -X POST -H 'Content-Type: application/json' -d @log_spec.json http://35.231.108.142:8090/druid/indexer/v1/supervisor
+curl -X POST -H 'Content-Type: application/json' -d @metrics_spec.json http://35.231.108.142:8090/druid/indexer/v1/supervisor
