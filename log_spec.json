@@ -1,0 +1,41 @@
+{
+  "type": "kafka",
+  "dataSchema": {
+    "dataSource": "logs-source",
+    "parser": {
+      "type": "string",
+      "parseSpec": {
+        "format": "json",
+        "timestampSpec": {
+          "column": "server_time",
+          "format": "iso"
+        },
+        "dimensionsSpec": {
+          "dimensions": [
+            { "name" : "log_level", "type" : "string" },
+            { "name" : "log_text", "type" : "string" }
+          ]
+        }
+      }
+    },
+    "metricsSpec": [],
+    "granularitySpec": {
+      "rollup": true
+    }
+  },
+  "tuningConfig": {
+    "type": "kafka",
+    "maxRowsPerSegment": 5000000,
+    "reportParseExceptions": true,
+    "resetOffsetAutomatically": true
+  },
+  "ioConfig": {
+    "topic": "logs-topic",
+    "taskCount": 1,
+    "replicas": 1,
+    "taskDuration": "PT1H",
+    "consumerProperties": {
+      "bootstrap.servers": "35.211.13.141:9092,35.211.21.153:9092,35.211.37.39:9092,35.211.83.103:9092,35.211.51.202:9092,35.211.149.62:9092"
+    }
+  }
+}

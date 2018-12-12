@@ -1,0 +1,5 @@
+- name: Start the Kafka service.
+  become: true
+  service:
+    name: kafka
+    state: started

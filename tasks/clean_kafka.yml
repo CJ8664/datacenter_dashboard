@@ -1,0 +1,10 @@
+- name: Remove data and log directory
+  become: true
+  file:
+    state: absent
+    path: "{{ item }}/"
+  loop:
+    - /usr/local/kafka_{{ scala_version }}-{{ kafka_version }}
+    - /etc/init.d/kafka
+    - /usr/local/kafka_{{ scala_version }}-{{ kafka_version }}/kafka-logs
+    - /tmp/kafka-logs

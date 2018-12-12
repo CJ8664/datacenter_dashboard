@@ -5,6 +5,6 @@
 
 - name: Start the Superset server
   become: true
-  shell: gunicorn -w 2 --timeout 60 -b  0.0.0.0:8088 --limit-request-line 0 --limit-request-field_size 0 superset:app >> superset.log 2>&1
+  shell: gunicorn -w 8 --timeout 60 -b  0.0.0.0:8088 --limit-request-line 0 --limit-request-field_size 0 superset:app >> superset.log 2>&1
   async: 3600
   poll: 0

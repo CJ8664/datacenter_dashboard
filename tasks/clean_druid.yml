@@ -1,0 +1,13 @@
+- name: Remove var and log directories
+
+  become: true
+  file:
+    state: absent
+    path: "{{ item }}/"
+  loop:
+    - /home/vijayhebbar91/druid-0.12.3/var
+    - /home/vijayhebbar91/druid-0.12.3/log
+
+- name: Initialize the var and log directories
+  become: true
+  shell: "/home/vijayhebbar91/druid-0.12.3/bin/init"

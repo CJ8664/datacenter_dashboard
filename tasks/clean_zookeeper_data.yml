@@ -1,0 +1,8 @@
+- name: Remove data and log directory
+  become: true
+  file:
+    state: absent
+    path: "{{ item }}/"
+  loop:
+    - /var/lib/zookeeper/version-2
+    - /var/log/zookeeper

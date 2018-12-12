@@ -1,0 +1,16 @@
+- name: Install Druid
+  become: true
+  apt:
+    name: zookeeperd
+
+- name: Copy configuration file
+  become: true
+  template:
+    src: '../templates/zoo.cfg.j2'
+    dest: '/etc/zookeeper/conf/zoo.cfg'
+
+- name: Copy myid file
+  become: true
+  template:
+    src: '../templates/myid.j2'
+    dest: '/var/lib/zookeeper/myid'

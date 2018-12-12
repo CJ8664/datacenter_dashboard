@@ -1,0 +1,4 @@
+- name: Start all the druid servers
+  become: true
+  shell: "/home/vijayhebbar91/druid-0.12.3/bin/start_all.sh"
+  ignore_errors: true

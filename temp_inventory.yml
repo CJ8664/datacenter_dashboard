@@ -1,0 +1,7 @@
+[kafka]
+35.211.13.141 kafka_brokerid=1 ansible_user=csjain ansible_ssh_private_key_file=/Users/chiragjain/.ssh/id_gcp
+35.211.21.153 kafka_brokerid=2 ansible_user=csjain ansible_ssh_private_key_file=/Users/chiragjain/.ssh/id_gcp
+35.211.37.39 kafka_brokerid=3 ansible_user=csjain ansible_ssh_private_key_file=/Users/chiragjain/.ssh/id_gcp
+35.211.83.103 kafka_brokerid=4 ansible_user=csjain ansible_ssh_private_key_file=/Users/chiragjain/.ssh/id_gcp
+35.211.51.202 kafka_brokerid=5 ansible_user=csjain ansible_ssh_private_key_file=/Users/chiragjain/.ssh/id_gcp
+35.211.149.62 kafka_brokerid=6 ansible_user=csjain ansible_ssh_private_key_file=/Users/chiragjain/.ssh/id_gcp

@@ -1,0 +1,4 @@
+---
+- hosts: kafka_stream
+  tasks:
+    - include: ../tasks/install_ksh_service.yml
